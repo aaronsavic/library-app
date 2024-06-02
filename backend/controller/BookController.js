@@ -34,7 +34,7 @@ export const saveBook = async(req, res)=> {
     const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
     const allowedTypes = ['.png', '.jpg', '.jpeg'];
 
-    if(!allowedTypes.includes(ext.toLocaleLowerCase())) return res.status(422).json({msg: "Invalid Image"});
+    if(!allowedTypes.includes(ext.toLowerCase())) return res.status(422).json({msg: "Invalid Image"});
     if(fileSize > 5000000) return res.status(422).json({msg: "Image must be less than 5 MB"});
 
     file.mv(`./public/images/${fileName}`, async(err)=>{
@@ -58,15 +58,15 @@ export const updateBook = async(req, res)=> {
 
     let fileName = "";
     if(req.files === null) {
-        fileName = Book.image;
+        fileName = book.image;
     } else {
         const file = req.files.file;
         const fileSize = file.data.length;
         const ext = path.extname(file.name);
-        const fileName = file.md5 + ext;
+        fileName = file.md5 + ext;
         const allowedTypes = ['.png', '.jpg', '.jpeg'];
 
-        if(!allowedTypes.includes(ext.toLocaleLowerCase())) return res.status(422).json({msg: "Invalid Image"});
+        if(!allowedTypes.includes(ext.toLowerCase())) return res.status(422).json({msg: "Invalid Image"});
         if(fileSize > 5000000) return res.status(422).json({msg: "Image must be less than 5 MB"});
 
         const filepath = `./public/images/${book.image}`;
@@ -76,6 +76,7 @@ export const updateBook = async(req, res)=> {
             if(err) return res.status(500).json({msg: err.message});
         });
     };
+
     const name = req.body.title;
     const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
 
@@ -87,7 +88,7 @@ export const updateBook = async(req, res)=> {
         });
         res.status(200).json({msg: "Product Updated Successfullty"});
     } catch (error) {
-        
+        console.log(error.message);
     }
 }
 
